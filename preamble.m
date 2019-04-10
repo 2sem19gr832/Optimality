@@ -24,14 +24,14 @@ Q_bp_sys = zeros(M-L+1,1);
 revenue = zeros(M-L+1,1);
 
 % Generates the data (Low pass filtered white gaussian noise)
-price_data_generator %(OBS: There is a rand seed = 1 in the file)
+pricedatagenerator %(OBS: There is a rand seed = 1 in the file)
 
 %% Plot price vectors
-figure
+figure(1)
 hold on
-stairs(P_E)
-stairs(P_G,'r')
-stairs(P_W,'g')
+stairs(P_E)     %electricity
+stairs(P_G,'r') %gas
+stairs(P_W,'g') %waste
 title('price data')
 legend('Price Electricity','Price for gas','Price of burning waste')
 ylabel('[DKK/MWh]')
@@ -84,26 +84,26 @@ end
 %% Plot the results
 
 % I got you started! Make some more plots and investigate the results
-close all
-figure
+%close all
+figure(2)
 stairs(E_A_sys)
 title('The state of charge in the accumulator')
 ylabel('[MWh]')
 xlabel('Sample [hour]')
 
-figure
+figure(3)
 stairs(Q_W_sys)
 title('Power from using waste')
 ylabel('[MW]')
 xlabel('Sample [hour]')
 
-figure
+figure(4)
 stairs(Q_G_sys)
-title('Power from unsing gas')
+title('Power from using gas')
 ylabel('[MW]')
 xlabel('Sample [hour]')
 
-figure
+figure(5)
 hold on
 stairs(Q_E_sys,'r')
 stairs(P_E)
@@ -117,7 +117,7 @@ for i=1:length(revenue)
    r_sum(i)=sum(revenue(1:i)); 
 end
 
-figure
+figure(6)
 hold on
 stairs(r_sum)
 title('Total revenue generated over time');
