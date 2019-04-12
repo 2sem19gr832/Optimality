@@ -24,7 +24,7 @@ Q_bp_sys = zeros(M-L+1,1);
 revenue = zeros(M-L+1,1);
 
 % Generates the data (Low pass filtered white gaussian noise)
-pricedatagenerator %(OBS: There is a rand seed = 1 in the file)
+price_data_generator %(OBS: There is a rand seed = 1 in the file)
 
 %% Plot price vectors
 figure
