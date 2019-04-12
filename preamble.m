@@ -55,17 +55,32 @@ E_A_sys(1) = 0; %Initial condition
 for k = 1:M-L+1 % The main loop
 
 cvx_begin quiet % The begining of the optimization problem
-
 % Define the variables %%% FILL IN %%%
-variables P_E P_G P_W
-
+variables Q_W(L,1) Q_G(L,1) Q_E(L,1) Q_bp(L,1) Q_A_in(L,1) Q_A_out(L,1) E_A(L,1) %P_E P_G P_W
 % Specify the optimization of cost %%% FILL IN %%% 
-
+maximize(P_E(k:k+9)'*Q_E(1:L)-(P_G(k:k+9)'*Q_G(1:L)+P_W(k:k+9)'*Q_W(1:L)))*Ts
 
 % constraints %%% FILL IN %%%
 subject to 
-
-
+    %Accumulator dynamics
+    E_A(k+1) == E_A(k)+(Q_A_in(k)-Q_A_out(k))*Ts
+    %Accumulator dynamics constraints
+    E_A <= E_A_max
+    E_A >= E_A_min
+    %Waste constraints
+    Q_W >= Q_W_min
+    Q_W <= Q_W_max
+    %Gas constraints
+    Q_G <= Q_G_min
+    Q_G >= Q_G_max
+    %accumulator input/output
+    Q_A_in <= Q_A_in_max
+    Q_A_in >= Q_A_in_min
+    Q_A_out <= Q_A_out_max
+    Q_A_out >= Q_A_out_min
+    %Flow constraints
+    Q_W+Q_G == Q_bp+Q_A_in
+    Q_E == Q_bp+Q_A_out
 cvx_end % The end of the optimization problem
 cvx_status % Tells whether the problem is solved. 
 %Does not tell you whether the problem is posed correctly. 
