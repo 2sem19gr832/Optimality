@@ -53,7 +53,7 @@ Q_A_out_max = 25;
 E_A_sys(1) = 0; %Initial condition
 
 for k = 1:M-L+1 % The main loop
-
+k
 cvx_begin quiet % The begining of the optimization problem
 
 % Define the variables %%% FILL IN %%%
@@ -69,25 +69,25 @@ maximize(ones(1,L)*Ptot); %We want to maximize the profit subject to the energy 
 subject to 
 
 %Accumulator Energy storage Dynamics
-E_A(1) == 0
+E_A(1) == E_A_sys(k)
 E_A(2:L) == E_A(1:L-1) + (Q_A_in(1:L-1) - Q_A_out(1:L-1));
 
 
 %Energy contraints for waste and gas, respectively.
-Q_W_min <= Q_W(L,1) <= Q_W_max;
-Q_G_min <= Q_G(L,1) <= Q_G_max;
+Q_W_min*onesL <= Q_W <= Q_W_max*onesL;
+Q_G_min*onesL <= Q_G <= Q_G_max*onesL;
 
 %Energy contraints for the accumulator input and output
-Q_A_in_min <= Q_A_in(L,1) <= Q_A_in_max;
-Q_A_out_min <= Q_A_out(L,1) <= Q_A_out_max;
+Q_A_in_min*onesL  <= Q_A_in  <= Q_A_in_max*onesL;
+Q_A_out_min*onesL <= Q_A_out <= Q_A_out_max*onesL;
 
 %Equality constraint for energy leaving the plant
 Q_E == Q_A_in + Q_bp;
 %Equality contraint for energy produced
-Q_G(L,1) + Q_W(L,1) == Q_bp(L,1) + Q_A_in(L,1)
+Q_G + Q_W == Q_bp + Q_A_in
 
 %Contraint for the energy leaving the plant     
-E_A_min <= E_A(L,1) <= E_A_max;
+E_A_min*onesL <= E_A <= E_A_max*onesL;
 
 cvx_end % The end of the optimization problem
 cvx_status % Tells whether the problem is solved. 
