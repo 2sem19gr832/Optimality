@@ -74,15 +74,20 @@ E_A(2:L) == E_A(1:L-1) + (Q_A_in(1:L-1) - Q_A_out(1:L-1));
 
 
 %Energy contraints for waste and gas, respectively.
-Q_W_min <= Q_W(k) <= Q_W_max;
-Q_G_min <= Q_G(k) <= Q_G_max;
+Q_W_min <= Q_W(L,1) <= Q_W_max;
+Q_G_min <= Q_G(L,1) <= Q_G_max;
 
 %Energy contraints for the accumulator input and output
-Q_A_in_min <= Q_A_in(k) <= Q_A_in_max;
-Q_A_out_min <= Q_A_out(k) <= Q_A_out_max;
+Q_A_in_min <= Q_A_in(L,1) <= Q_A_in_max;
+Q_A_out_min <= Q_A_out(L,1) <= Q_A_out_max;
+
+%Equality constraint for energy leaving the plant
+Q_E == Q_A_in + Q_bp;
+%Equality contraint for energy produced
+Q_G(L,1) + Q_W(L,1) == Q_bp(L,1) + Q_A_in(L,1)
 
 %Contraint for the energy leaving the plant     
-E_A_min <= E_A(k) <= E_A_max;
+E_A_min <= E_A(L,1) <= E_A_max;
 
 cvx_end % The end of the optimization problem
 cvx_status % Tells whether the problem is solved. 
