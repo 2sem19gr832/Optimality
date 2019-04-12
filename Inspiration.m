@@ -60,7 +60,7 @@ cvx_begin quiet % The begining of the optimization problem
 variables Q_W(L,1) Q_G(L,1) Q_E(L,1) Q_bp(L,1) Q_A_in(L,1) Q_A_out(L,1) E_A(L,1) % Where L is the control horizon
 
 % Specify the optimization of cost
-maximize(P_E(k:k+L-1)' * Q_E(1:L) - (P_G(k:k+L-1)' * Q_G(1:L) + P_W(k:k+L-1)' * Q_W(1:L))) % Multiply by Ts, but Ts = 1.
+maximize(P_E(k:k+L-1)'*Q_E(1:L)-(P_G(k:k+L-1)'*Q_G(1:L)+P_W(k:k+L-1)'*Q_W(1:L))) % Multiply by Ts, but Ts = 1.
 
 % constraints 
 subject to 
