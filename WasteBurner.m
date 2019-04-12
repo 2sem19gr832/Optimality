@@ -57,10 +57,10 @@ for k = 1:M-L+1 % The main loop
 cvx_begin quiet % The begining of the optimization problem
 
 % Define the variables %%% FILL IN %%%
-variables Q_W Q_G Q_E Q_A_in Q_A_out E_A 
+variables Q_W(k) Q_G(k) Q_E(k) Q_A_in(k) Q_A_out(k) E_A(k) 
 
 % Specify the optimization of cost %%% FILL IN %%%
-Pot(k) = (P_E(k)*Q_E - (P_G(k)*Q_G + P_W(k)*Q_W))*Ts;
+Pot(k) = (P_E(k)*Q_E(k) - (P_G(k)*Q_G(k) + P_W(k)*Q_W(k)))*Ts;
 
 Ptot = sum(Pot);
 maximize(Ptot)
@@ -69,13 +69,13 @@ maximize(Ptot)
 
 % constraints %%% FILL IN %%%
 subject to 
-E_A(k+1) = E_A(k) + (Q_A_in - Q_A_out);
+E_A(k+1) == E_A(k) + (Q_A_in(k) - Q_A_out(k));
 
-Q_W_min <= Q_W <= Q_W_max;
-Q_G_min <= Q_G <= Q_G_max;
-Q_A_in_min <= Q_A_in <= Q_A_in_max;
-Q_A_out_min <= Q_A_out <= Q_A_out_max;
-E_A_min <= E_A <= E_A_max;
+Q_W_min <= Q_W(k) <= Q_W_max;
+Q_G_min <= Q_G(k) <= Q_G_max;
+Q_A_in_min <= Q_A_in(k) <= Q_A_in_max;
+Q_A_out_min <= Q_A_out(k) <= Q_A_out_max;
+E_A_min <= E_A(k) <= E_A_max;
 
 cvx_end % The end of the optimization problem
 cvx_status % Tells whether the problem is solved. 
