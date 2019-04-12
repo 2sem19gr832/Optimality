@@ -3,7 +3,7 @@ P_E_raw = zeros(M+conv,1); % Price of Electricity [DKK/MWh]
 P_G_raw = zeros(M+conv,1); % Price of Gas [DKK/MWh] 
 P_W_raw = 30*ones(M+conv,1); % Price of Waste [DKK/MWh] 
 
-rng(2)
+rng(1)
 
 sigma_z = 50;
 mu_z = 45;
