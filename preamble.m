@@ -57,7 +57,7 @@ for k = 1:M-L+1 % The main loop
 cvx_begin quiet % The begining of the optimization problem
 
 % Define the variables %%% FILL IN %%%
-variables 
+variables P_E P_G P_W
 
 % Specify the optimization of cost %%% FILL IN %%% 
 
