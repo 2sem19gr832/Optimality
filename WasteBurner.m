@@ -57,15 +57,13 @@ for k = 1:M-L+1 % The main loop
 cvx_begin quiet % The begining of the optimization problem
 
 % Define the variables %%% FILL IN %%%
-variables Q_W(L,1) Q_G(L,1) Q_E(L,1) Q_A_in(L,1) Q_A_out(L,1) E_A(L,1) 
+variables Q_W(L,1) Q_G(L,1) Q_E(L,1) Q_A_in(L,1) Q_A_out(L,1) E_A(L,1) Q_bp(L,1)
 
 % Specify the optimization of cost %%% FILL IN %%%
-Pot(k:k+L-1) = (P_E(k:k+L-1)*Q_E(1:L) - (P_G(k:k+L-1)*Q_G(1:L) + P_W(k:k+L-1)*Q_W(1:L)))*Ts;
+Ptot(k:k+L-1) = (P_E(k:k+L-1)'*Q_E(1:L) - (P_G(k:k+L-1)'*Q_G(1:L) + P_W(k:k+L-1)'*Q_W(1:L)))*Ts; %Total profit in DKK
 
-Ptot = sum(Pot);
-maximize(Ptot);
-
-
+%Ptot = sum(Pot);
+maximize(Ptot(1)); %We want to maximize the profit subject to the energy contraints seen below
 
 % constraints %%% FILL IN %%%
 subject to 
@@ -77,9 +75,11 @@ E_A(k+1) == E_A(k) + (Q_A_in(k) - Q_A_out(k));
 %Energy contraints for waste and gas, respectively.
 Q_W_min <= Q_W(k) <= Q_W_max;
 Q_G_min <= Q_G(k) <= Q_G_max;
+
 %Energy contraints for the accumulator input and output
 Q_A_in_min <= Q_A_in(k) <= Q_A_in_max;
 Q_A_out_min <= Q_A_out(k) <= Q_A_out_max;
+
 %Contraint for the energy leaving the plant     
 E_A_min <= E_A(k) <= E_A_max;
 
