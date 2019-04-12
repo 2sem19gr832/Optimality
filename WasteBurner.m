@@ -57,7 +57,7 @@ for k = 1:M-L+1 % The main loop
 cvx_begin quiet % The begining of the optimization problem
 
 % Define the variables %%% FILL IN %%%
-variables Q_W(k) Q_G(k) Q_E(k) Q_A_in(k) Q_A_out(k) E_A(k) 
+variables Q_W(L,1) Q_G(L,1) Q_E(L,1) Q_A_in(L,1) Q_A_out(L,1) E_A(L,1) 
 
 % Specify the optimization of cost %%% FILL IN %%%
 Pot(k) = (P_E(k)*Q_E(k) - (P_G(k)*Q_G(k) + P_W(k)*Q_W(k)))*Ts;
