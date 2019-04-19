@@ -55,15 +55,17 @@ E_A_sys(1) = 0; %Initial condition
 for k = 1:M-L+1 % The main loop
 k
 cvx_begin quiet % The begining of the optimization problem
+%cvx_solver mosek
+
 
 % Define the variables %%% FILL IN %%%
-variables Q_W(L,1) Q_G(L,1) Q_E(L,1) Q_A_in(L,1) Q_A_out(L,1) E_A(L,1) Q_bp(L,1) Ptot(L, 1)
+variables Q_W(L,1) Q_G(L,1) Q_E(L,1) Q_A_in(L,1) Q_A_out(L,1) E_A(L,1) Q_bp(L,1) Ptot
 
 % Specify the optimization of cost %%% FILL IN %%%
-Ptot(1:L) == (P_E(k:k+L-1)'*Q_E(1:L) - (P_G(k:k+L-1)'*Q_G(1:L) + P_W(k:k+L-1)'*Q_W(1:L)))*Ts; %Total profit in DKK
+Ptot == (P_E(k:k+L-1)'*Q_E(1:L) - (P_G(k:k+L-1)'*Q_G(1:L) + P_W(k:k+L-1)'*Q_W(1:L)))*Ts; %Total profit in DKK
 
 %Ptot = sum(Pot);
-maximize(ones(1,L)*Ptot); %We want to maximize the profit subject to the energy contraints seen below
+maximize(Ptot); %We want to maximize the profit subject to the energy contraints seen below
 
 % constraints %%% FILL IN %%%
 subject to 
@@ -82,11 +84,12 @@ Q_A_in_min*onesL  <= Q_A_in  <= Q_A_in_max*onesL;
 Q_A_out_min*onesL <= Q_A_out <= Q_A_out_max*onesL;
 
 %Equality constraint for energy leaving the plant
-Q_E == Q_A_in + Q_bp;
+Q_E == Q_A_out + Q_bp;
 %Equality contraint for energy produced
 Q_G + Q_W == Q_bp + Q_A_in
 
 %Contraint for the energy leaving the plant     
+Q_bp >= 0;
 E_A_min*onesL <= E_A <= E_A_max*onesL;
 
 cvx_end % The end of the optimization problem
