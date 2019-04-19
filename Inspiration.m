@@ -1,6 +1,6 @@
-clear all
-close all
-clc
+%clear all
+%close all
+%clc
 
 %% CVX exercise 
 % To complete the exercise you need to fill in the missing part of the cvx
@@ -53,7 +53,7 @@ Q_A_out_max = 25;
 E_A_sys(1) = 0; %Initial condition
 
 for k = 1:M-L+1 % The main loop     191 iteration when L = 10
-    
+k    
 cvx_begin quiet % The begining of the optimization problem
 
 % Define the variables 
@@ -109,8 +109,8 @@ revenue(k) = [-P_G(k); -P_W(k); P_E(k)]'*[Q_G(1); Q_W(1); Q_E(1)];
 end
 %% Plot the results
 
-close all
-figure
+%close all
+figure(1)
 hold on
 stairs(E_A_sys)
 stairs(P_E)
@@ -119,19 +119,19 @@ title('The state of charge in the accumulator')
 ylabel('[MWh]')
 xlabel('Sample [hour]')
 
-figure
+figure(2)
 stairs(Q_W_sys)
 title('Power from using waste')
 ylabel('[MW]')
 xlabel('Sample [hour]')
 
-figure
+figure(3)
 stairs(Q_G_sys)
 title('Power from using gas')
 ylabel('[MW]')
 xlabel('Sample [hour]')
 
-figure
+figure(4)
 hold on
 stairs(Q_E_sys,'r')
 stairs(P_E)
@@ -140,25 +140,25 @@ title('Comparing Power production with power price')
 ylabel('[MW]')
 xlabel('Sample [hour]')
 
-figure
+figure(5)
 stairs(Q_bp_sys)
 title('Power that bybasses the accumulator')
 ylabel('[MW]')
 xlabel('Sample [hour]')
 
-figure
+figure(6)
 stairs(Q_A_out_sys)
 title('Power that comes out of the accumulator')
 ylabel('[MW]')
 xlabel('Sample [hour]')
 
-figure
+figure(7)
 stairs(revenue)
 title('revenue')
 ylabel('[DKK]')
 xlabel('Sample [hour]')
 
-figure
+figure(8)
 hold on
 stairs(P_E)
 stairs(P_G,'r')
@@ -188,25 +188,25 @@ for i=1:length(revenue)
 end
 figure('Name', 'Total revenue generated over time')
 hold on
-stairs(r_sum,'LineWidth',2)
+stairs(r_sum,'LineWidth',1)
 ax = gca;
-ax.FontSize = 20;
+ax.FontSize = 10;
 title('Total revenue generated over time', 'FontSize',24)
-xlabel('Sample [hour]','FontSize',20)
-ylabel('Revenue [DKK]','FontSize',20)
+xlabel('Sample [hour]','FontSize',10)
+ylabel('Revenue [DKK]','FontSize',10)
 grid
 
 
 figure('Name', 'The state of charge in the accumulator')
 hold on
-stairs(E_A_sys, 'LineWidth',2)
-stairs(P_E, 'LineWidth',2)
+stairs(E_A_sys, 'LineWidth',1)
+stairs(P_E, 'LineWidth',1)
 ax = gca;
-ax.FontSize = 20;
+ax.FontSize = 10;
 title('State of the charge in the accumulator', 'FontSize',24)
 legend('State of the charge in the accumulator','Power Price')
-xlabel('Sample [hour]','FontSize',20)
-ylabel('[MWh]','FontSize',20)
+xlabel('Sample [hour]','FontSize',10)
+ylabel('[MWh]','FontSize',10)
 grid
 
 %%
