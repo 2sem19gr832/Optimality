@@ -157,6 +157,21 @@ save((['Windowws/Testing',num2str(L)]))
 %% Comparison plots
 %For loop to load different window files.
 iter = [10 15 20 25 30];
-for i=1:5
-    r_sumw(i) = load((['Testing',num2str(iter(i))]));
+for i=1:12
+    %r_sumw(i) = load((['Testing',num2str(iter(i))]));
+    rsum(i) = load(['Permutations/results_',num2str(i-1)],'r_sum');
+    test(i,:) = rsum(i).r_sum;
 end
+%test = [rsum(1:2).r_sum];
+figure(6)
+hold on
+
+for i= 1:12
+    color = [i/12, 1,1];
+    stairs(test(i,:),'Color',hsv2rgb(color))
+end
+title('Total revenue generated over time');
+ylabel('Revenues [DKK]')
+xlabel('Samples [hour]')
+grid
+hold off
