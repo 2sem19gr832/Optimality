@@ -82,7 +82,7 @@ subject to
 
     % Power produced by the waste burner constarints:
     Q_W <= Q_W_max*ones(L,1);
-    Q_W >= Q_W_min*ones(L,1);
+*****    Q_W >= Q_W_min*ones(L,1);
 
     % Power produced by the gas turbine constraints:
     Q_G <= Q_G_max*ones(L,1);
