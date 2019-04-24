@@ -171,7 +171,7 @@ for i= 1:12
     stairs(test(i,:),'Color',hsv2rgb(color))
 end
 title('Total revenue generated over time');
-ylabel('Revenues [DKK]')
+ylabel('Revenue [DKK]')
 xlabel('Samples [hour]')
 grid
 hold off
