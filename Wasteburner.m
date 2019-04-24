@@ -6,7 +6,7 @@ clc
 % To complete the exercise you need to fill in the missing part of the cvx
 % proceedure (from cvx_begin to cvx_end) GOOD LUCK
 
-L = 10; % Window size of the mpc proplem (Control horizon = Prediction horizon)
+L = 30; % Window size of the mpc proplem (Control horizon = Prediction horizon)
 M = 200; % The duration of the control process
 Ts = 1; % Time step (1 hour)
 
@@ -59,10 +59,10 @@ cvx_begin quiet % The begining of the optimization problem
 
 
 % Define the variables %%% FILL IN %%%
-variables Q_W(L,1) Q_G(L,1) Q_E(L,1) Q_A_in(L,1) Q_A_out(L,1) E_A(L,1) Q_bp(L,1) Ptot
+variables Q_W(L,1) Q_G(L,1) Q_E(L,1) Q_A_in(L,1) Q_A_out(L,1) E_A(L,1) Q_bp(L,1) %Ptot
 
 % Specify the optimization of cost %%% FILL IN %%%
-Ptot == (P_E(k:k+L-1)'*Q_E(1:L) - (P_G(k:k+L-1)'*Q_G(1:L) + P_W(k:k+L-1)'*Q_W(1:L)))*Ts; %Total profit in DKK
+Ptot = (P_E(k:k+L-1)'*Q_E(1:L) - (P_G(k:k+L-1)'*Q_G(1:L) + P_W(k:k+L-1)'*Q_W(1:L)))*Ts; %Total profit in DKK
 
 %Ptot = sum(Pot);
 maximize(Ptot); %We want to maximize the profit subject to the energy contraints seen below
@@ -72,8 +72,7 @@ subject to
 
 %Accumulator Energy storage Dynamics
 E_A(1) == E_A_sys(k)
-E_A(2:L) == E_A(1:L-1) + (Q_A_in(1:L-1) - Q_A_out(1:L-1));
-
+E_A(2:L) == E_A(1:L-1) + (Q_A_in(1:L-1) - Q_A_out(1:L-1)); % times Ts though since Ts = 1, omitted.
 
 %Energy contraints for waste and gas, respectively.
 Q_W_min*onesL <= Q_W <= Q_W_max*onesL;
@@ -88,7 +87,7 @@ Q_E == Q_A_out + Q_bp;
 %Equality contraint for energy produced
 Q_G + Q_W == Q_bp + Q_A_in
 
-%Contraint for the energy leaving the plant     
+%Contraint for the energy leaving the plant
 Q_bp >= 0;
 E_A_min*onesL <= E_A <= E_A_max*onesL;
 
@@ -106,6 +105,7 @@ Q_A_out_sys(k) = Q_A_out(1);
 Q_E_sys(k) = Q_E(1);
 Q_bp_sys(k) = Q_bp(1);
 revenue(k) = [-P_G(k); -P_W(k); P_E(k)]'*[Q_G(1); Q_W(1); Q_E(1)];
+
 end
 %% Plot the results
 
@@ -125,7 +125,7 @@ xlabel('Sample [hour]')
 
 figure
 stairs(Q_G_sys)
-title('Power from unsing gas')
+title('Power from using gas')
 ylabel('[MW]')
 xlabel('Sample [hour]')
 
@@ -150,3 +150,28 @@ title('Total revenue generated over time');
 ylabel('Revenue [DKK]')
 xlabel('Sample [hour]')
 grid
+
+
+save((['Windowws/Testing',num2str(L)]))
+%r_sumL = load((['Testing',num2str(2)]), r_sum)
+%% Comparison plots
+%For loop to load different window files.
+iter = [10 15 20 25 30];
+for i=1:12
+    %r_sumw(i) = load((['Testing',num2str(iter(i))]));
+    rsum(i) = load(['Permutations/results_',num2str(i-1)],'r_sum');
+    test(i,:) = rsum(i).r_sum;
+end
+%test = [rsum(1:2).r_sum];
+figure(6)
+hold on
+
+for i= 1:12
+    color = [i/12, 1,1];
+    stairs(test(i,:),'Color',hsv2rgb(color))
+end
+title('Total revenue generated over time');
+ylabel('Revenues [DKK]')
+xlabel('Samples [hour]')
+grid
+hold off
