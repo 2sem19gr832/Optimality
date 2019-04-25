@@ -172,18 +172,18 @@ hold off
 %% Comparison plots
 %For loop to load different window files.
 iter = [10 15 20 25 30];
-a=dir(['Permutations/versions/' '/*.mat'])
+a=dir(['Permutations/versions/' '/*.mat']);
 for i=1:size(a,1)
     rsum(i) = load(['Permutations/versions/results_',num2str(i-1)],'r_sum');
     test(i,:) = rsum(i).r_sum;
 end
-figure(6)
+figure(7)
 hold on
 for i= 1:size(a,1)
-    color = [i/12, 1,1];
+    color = [i/size(a,1), 1,1];
     stairs(test(i,:),'Color',hsv2rgb(color))
 end
-title('Total revenue generated over time');
+title('Total revenue for different permutations');
 ylabel('Revenue [DKK]')
 xlabel('Samples [hour]')
 grid
