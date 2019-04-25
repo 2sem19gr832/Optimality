@@ -111,39 +111,45 @@ end
 
 % I got you started! Make some more plots and investigate the results
 close all
-figure
-stairs(E_A_sys)
-title('The state of charge in the accumulator')
-ylabel('[MWh]')
-xlabel('Sample [hour]')
+% figure
+% stairs(E_A_sys)
+% title('The state of charge in the accumulator')
+% ylabel('[MWh]')
+% xlabel('Sample [hour]')
 
-figure
+figure(1)
 stairs(Q_W_sys)
 title('Power from using waste')
 ylabel('[MW]')
 xlabel('Sample [hour]')
 
-figure
-stairs(Q_G_sys)
-title('Power from using gas')
-ylabel('[MW]')
-xlabel('Sample [hour]')
-
-figure
+figure(2)
 hold on
-stairs(Q_E_sys,'r')
-stairs(P_E)
-legend('Electrical Power','Power Price')
-title('Comparing Power production with power price')
-ylabel('[MW]')
+stairs(Q_G_sys,'g')     %Power from gas
+stairs(E_A_sys,'b')     %
+stairs(Q_W_sys,'r')     %Power from waste
+title('Power production(gas,wasteburner) and Accumulator charge')
+ylabel('[MW],[MWh]')
 xlabel('Sample [hour]')
+hold off
+
+figure(3)  %INITIAL SOLUTION - INCLUDE STATE OF CHARGE IN ACCUMULATOR
+hold on
+stairs(Q_E_sys,'r') %Power output
+stairs(P_E,'b')     %Energy price
+stairs(E_A_sys,'g') %Accumulator Charge
+legend('Power Output[MW]','Power Price[DKK]','Accumulator Charge[MWh]')
+title('Relation of Power Output(Q_E), Power price(P_E) and Accumulator charge(E_A)')
+ylabel('[MW],[DKK],[MWh]')
+xlabel('Sample [hour]')
+hold off
 
 %Creat revenue vector as rolling sum via for loop
 for i=1:length(revenue)
    r_sum(i)=sum(revenue(1:i)); 
 end
 
-figure
+figure(5) %INITIAL SOLUTION
 hold on
 stairs(r_sum)
 title('Total revenue generated over time');
@@ -151,27 +157,34 @@ ylabel('Revenue [DKK]')
 xlabel('Sample [hour]')
 grid
 
+figure(6)
+hold on
+stairs(revenue,'r')
+stairs(P_E*100,'b')
+legend('Revenue pr. timestep','Energy Price')
+title('Revenue at every sample vs. price of energy')
+ylabel('Revenue, Price [DKK]')
+xlabel('Sample [hour]')
+hold off
 
-save((['Windowws/Testing',num2str(L)]))
+%save((['Windowws/Testing',num2str(L)]))
 %r_sumL = load((['Testing',num2str(2)]), r_sum)
 %% Comparison plots
 %For loop to load different window files.
 iter = [10 15 20 25 30];
-for i=1:12
-    %r_sumw(i) = load((['Testing',num2str(iter(i))]));
-    rsum(i) = load(['Permutations/results_',num2str(i-1)],'r_sum');
+a=dir(['Permutations/versions/' '/*.mat']);
+for i=1:size(a,1)
+    rsum(i) = load(['Permutations/versions/results_',num2str(i-1)],'r_sum');
     test(i,:) = rsum(i).r_sum;
 end
-%test = [rsum(1:2).r_sum];
-figure(6)
+figure(7)
 hold on
-
-for i= 1:12
-    color = [i/12, 1,1];
+for i= 1:size(a,1)
+    color = [i/size(a,1), 1,1];
     stairs(test(i,:),'Color',hsv2rgb(color))
 end
-title('Total revenue generated over time');
-ylabel('Revenues [DKK]')
+title('Total revenue for different permutations');
+ylabel('Revenue [DKK]')
 xlabel('Samples [hour]')
 grid
 hold off
